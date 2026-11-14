@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
+import fs from 'fs';
 import { config } from './config.js';
 import { db } from './db/database.js';
 
@@ -65,6 +67,25 @@ app.use('/api/guardrails', guardrailRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/audit-logs', auditRoutes);
+
+// Static Frontend Serving in Production
+const clientDistCandidates = [
+  path.resolve(process.cwd(), '../client/dist'),
+  path.resolve(process.cwd(), 'client/dist'),
+  path.resolve(__dirname, '../../client/dist'),
+];
+
+for (const distPath of clientDistCandidates) {
+  if (fs.existsSync(distPath)) {
+    console.log(`[AegisFlow] Serving static production frontend from: ${distPath}`);
+    app.use(express.static(distPath));
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api')) return next();
+      res.sendFile(path.join(distPath, 'index.html'));
+    });
+    break;
+  }
+}
 
 // Global Error Handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
