@@ -59,12 +59,44 @@ class AegisDatabase {
         this.supabase = createClient(config.supabaseUrl, config.supabaseKey);
         this.isSupabaseConnected = true;
         console.log('[AegisDatabase] Connected to external Supabase instance:', config.supabaseUrl);
+        this.syncFromSupabase();
       } catch (err) {
         console.warn('[AegisDatabase] Failed to initialize Supabase client, using local persistent engine:', err);
         this.isSupabaseConnected = false;
       }
     } else {
       console.log('[AegisDatabase] Operating in High-Performance Local Enterprise Storage Mode (Active)');
+    }
+  }
+
+  public async syncFromSupabase() {
+    if (!this.supabase || !this.isSupabaseConnected) return;
+    try {
+      const [p, g, r, i, m, a] = await Promise.all([
+        this.supabase.from('profiles').select('*'),
+        this.supabase.from('guardrail_policies').select('*'),
+        this.supabase.from('fragmented_data_records').select('*'),
+        this.supabase.from('incidents').select('*'),
+        this.supabase.from('mitigation_workflows').select('*'),
+        this.supabase.from('audit_logs').select('*')
+      ]);
+
+      if (p.data && p.data.length > 0) this.data.profiles = p.data;
+      if (g.data && g.data.length > 0) this.data.guardrail_policies = g.data;
+      if (r.data && r.data.length > 0) this.data.fragmented_data_records = r.data;
+      if (i.data && i.data.length > 0) this.data.incidents = i.data;
+      if (m.data && m.data.length > 0) this.data.mitigation_workflows = m.data;
+      if (a.data && a.data.length > 0) this.data.audit_logs = a.data;
+
+      this.persist();
+      console.log('[AegisDatabase] Synced live data from Supabase Cloud:', {
+        profiles: this.data.profiles.length,
+        records: this.data.fragmented_data_records.length,
+        incidents: this.data.incidents.length,
+        mitigations: this.data.mitigation_workflows.length,
+      });
+    } catch (err) {
+      console.warn('[AegisDatabase] Supabase initial sync notice:', err);
     }
   }
 
