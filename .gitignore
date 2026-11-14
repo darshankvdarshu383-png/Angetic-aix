@@ -1,0 +1,99 @@
+# =========================================================================
+# AEGISFLOW: COMPREHENSIVE REPOSITORY .GITIGNORE
+# =========================================================================
+
+# 1. Dependencies
+node_modules/
+*/node_modules/
+.pnp
+.pnp.js
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# 2. Environment Variables & Secret Files
+.env
+.env.*
+!.env.example
+*.env
+server/.env
+server/.env.*
+!server/.env.example
+client/.env
+client/.env.*
+!client/.env.example
+
+# 3. Build & Compilation Artifacts
+dist/
+*/dist/
+build/
+*/build/
+out/
+*/out/
+dist-ssr/
+*.local
+
+# 4. Local Database & Runtime Persistence Data
+data/
+*/data/
+*.sqlite
+*.sqlite3
+*.db
+*.jsonl
+*.seed.json
+
+# 5. Application & Package Manager Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 6. Test Reports & Code Coverage
+coverage/
+*/coverage/
+.nyc_output/
+*.lcov
+
+# 7. TypeScript Incremental Cache
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+.turbo/
+.cache/
+*/.cache/
+
+# 8. Temporary & Scratch Files
+temp/
+tmp/
+.temp/
+.tmp/
+test_*.js
+test_*.ts
+
+# 9. IDE & Editor Specific Folders
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# 10. Operating System Generated Metadata
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini

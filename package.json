@@ -1,0 +1,17 @@
+{
+  "name": "aegisflow",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Enterprise-grade Agentic AI Decision-Engine, Autonomous Incident Mitigation Orchestrator & AI Finance Assistant",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "dev": "node dev-runner.js",
+    "db:migrate": "cd server && npx tsx ../supabase/migrate.ts",
+    "build": "cd client && npm run build && cd ../server && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
